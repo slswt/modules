@@ -32,7 +32,7 @@ module "make_apigw_invokable" {
 }
 
 module "make_sns_invokable" {
-  source      = "github.com/ricsam/serverless_using_terraform//services/lambda/make_sns_invokable"
+  source      = "github.com/slswt/modules//services/lambda/make_sns_invokable"
   environment = "${var.environment}"
   lambda_arn  = "${module.simple_lambda.lambda_arn[1]}"
   lambda_path   = "${var.lambda_path}"

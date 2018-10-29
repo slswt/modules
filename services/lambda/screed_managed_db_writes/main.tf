@@ -24,19 +24,19 @@ module "simple_lambda" {
 }
 
 module "managed_policy_attachment_of_elastic_search" {
-  source = "github.com/ricsam/serverless_using_terraform//services/iam/managed_policy_attachment"
+  source = "github.com/slswt/modules//services/iam/managed_policy_attachment"
   key    = "Live/services/iam/policies/elastic_search/${var.environment}/terraform.tfstate"
   role   = "${module.simple_lambda.role_name}"
 }
 
 module "managed_policy_attachment_of_dynamo_db_updates_queue" {
-  source = "github.com/ricsam/serverless_using_terraform//services/iam/managed_policy_attachment"
+  source = "github.com/slswt/modules//services/iam/managed_policy_attachment"
   key    = "Live/services/iam/policies/dynamo_db_updates_queue/${var.environment}/terraform.tfstate"
   role   = "${module.simple_lambda.role_name}"
 }
 
 module "make_sns_invokable" {
-  source      = "github.com/ricsam/serverless_using_terraform//services/lambda/make_sns_invokable"
+  source      = "github.com/slswt/modules//services/lambda/make_sns_invokable"
   environment = "${var.environment}"
   lambda_arn  = "${local.sns_lambda_arn}"
   lambda_path = "${var.lambda_path}"

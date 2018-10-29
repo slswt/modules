@@ -8,7 +8,7 @@ variable "entry" {
 }
 
 module "config" {
-  source      = "github.com/ricsam/serverless_using_terraform//utils/config"
+  source      = "github.com/slswt/modules//utils/config"
   environment = "${var.environment}"
 }
 
@@ -17,7 +17,7 @@ locals {
   base_entry_format = "%s_%s"
 }
 module "snake_case" {
-  source = "github.com/ricsam/serverless_using_terraform//utils/snake_case"
+  source = "github.com/slswt/modules//utils/snake_case"
   value  = "${var.lambda_path}"
 }
 

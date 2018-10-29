@@ -25,7 +25,7 @@ data "terraform_remote_state" "microservices_apigw" {
 }
 
 module "camel_case" {
-  source = "github.com/ricsam/serverless_using_terraform//utils/camel_case"
+  source = "github.com/slswt/modules//utils/camel_case"
   value  = "${var.lambda_path}"
 }
 

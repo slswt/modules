@@ -9,7 +9,7 @@ variable "lambda_path" {}
 
 
 module "function_name" {
-  source = "github.com/ricsam/serverless_using_terraform//utils/function_name"
+  source = "github.com/slswt/modules//utils/function_name"
   environment = "${var.environment}"
   lambda_path = "${var.lambda_path}"
 }
