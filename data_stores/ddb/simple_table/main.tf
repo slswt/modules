@@ -22,15 +22,14 @@ variable "stream_view_type" {
   default = ""
 }
 
-
-
-module "config" {
-  source = "github.com/slswt/modules//utils/config"
-  environment = "${var.environment}"
+variable "ddb_table_name_prefix" {
+  
 }
 
+
+
 locals {
-  full_table_name = "${module.config.ddb_table_name_prefix}${var.table_name}"
+  full_table_name = "${var.ddb_table_name_prefix}${var.table_name}"
 }
 
 

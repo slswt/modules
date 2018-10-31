@@ -2,18 +2,16 @@ variable "lambda_path" {}
 
 variable "environment" {}
 
+variable "lambda_name_prefix" {}
+
+
 variable "entry" {
   description = "The entry function in the service.js file (default used if just the base_name is accessed)"
   default     = ""
 }
 
-module "config" {
-  source      = "github.com/slswt/modules//utils/config"
-  environment = "${var.environment}"
-}
-
 locals {
-  function_base_name = "${module.config.lambda_name_prefix}_${module.snake_case.value}"
+  function_base_name = "${var.lambda_name_prefix}_${module.snake_case.value}"
   base_entry_format = "%s_%s"
 }
 module "snake_case" {

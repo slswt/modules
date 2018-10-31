@@ -9,13 +9,12 @@ variable "acl" {
   description = "The acl value of the bucket"
 }
 
-module "config" {
-  source = "github.com/slswt/modules//utils/config"
-  environment = "${var.environment}"
+variable "s3_bucket_name_prefix" {
 }
 
+
 locals {
-  full_bucket_name = "${module.config.s3_bucket_name_prefix}${var.bucket_name}"
+  full_bucket_name = "${var.s3_bucket_name_prefix}${var.bucket_name}"
 }
 
 

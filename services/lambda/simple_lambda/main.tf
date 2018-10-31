@@ -18,7 +18,7 @@ data "external" "webpack_build" {
     # The relative path from the root path to the javascript entry file (relative path, e.g. ./service.js)
     "--servicePath=${var.service}",
 
-    "--nodeExternalsWhitelist=${jsonencode(var.node_externals_whitelist)}"
+    "--nodeExternalsWhitelist=${jsonencode(var.node_externals_whitelist)}",
   ]
 }
 
@@ -30,16 +30,17 @@ locals {
 }
 
 resource "aws_s3_bucket_object" "lambda_zip_upload" {
-  bucket       = "${var.config.lambda_deployment_bucket}"
+  bucket       = "${var.lambda_deployment_bucket}"
   key          = "${local.s3_key}"
   source       = "${data.external.webpack_build.result.zipFile}"
   content_type = "application/zip"
 }
 
 module "function_name" {
-  source      = "github.com/slswt/modules//utils/function_name"
-  environment = "${var.environment}"
-  lambda_path = "${var.lambda_path}"
+  source             = "github.com/slswt/modules//utils/function_name"
+  environment        = "${var.environment}"
+  lambda_path        = "${var.lambda_path}"
+  lambda_name_prefix = "${var.lambda_name_prefix}"
 }
 
 module "microservices_env" {
@@ -62,7 +63,7 @@ resource "aws_lambda_function" "simple_lambda" {
 
   function_name = "${local.fn_names[count.index]}"
 
-  s3_bucket = "${var.config.lambda_deployment_bucket}"
+  s3_bucket = "${var.lambda_deployment_bucket}"
   s3_key    = "${local.s3_key}"
 
   handler = "service.${var.handler_entries[count.index]}"

@@ -44,3 +44,11 @@ variable "node_externals_whitelist" {
   default     = []
   type        = "list"
 }
+
+variable "lambda_deployment_bucket" {
+  
+}
+variable "lambda_name_prefix" {
+  
+}
+
