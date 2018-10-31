@@ -1,7 +1,7 @@
 data "external" "webpack_build" {
   program = [
-    "node",
-    "${path.module}/build.js",
+    "slswtinternals",
+    "build_lambda",
     "--environment=${var.environment}",
     "--functionName=${var.lambda_path}",
     "--webpackMode=${var.webpack_mode}",

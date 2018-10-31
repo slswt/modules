@@ -1,6 +1,6 @@
 {
-  "name": "modules",
-  "version": "1.0.0",
+  "name": "@slswt/modules",
+  "version": "0.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -26,6 +26,7 @@
     "memory-fs": "^0.4.1",
     "minimist": "^1.2.0",
     "pkg-dir": "^3.0.0",
+    "webpack": "^4.23.1",
     "webpack-node-externals": "^1.7.2"
   }
 }
