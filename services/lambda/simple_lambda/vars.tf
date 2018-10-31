@@ -35,7 +35,6 @@ variable "lambda_path" {
 
 variable "lambda_environment" {
   description = "Environment vars to be proviced to the lambda"
-  default     = {}
   type        = "map"
 }
 
