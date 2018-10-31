@@ -43,10 +43,6 @@ module "function_name" {
   lambda_name_prefix = "${var.lambda_name_prefix}"
 }
 
-module "microservices_env" {
-  source      = "github.com/slswt/modules//utils/microservices_env"
-  environment = "${var.environment}"
-}
 
 data "null_data_source" "function_names" {
   count = "${length(var.handler_entries)}"
