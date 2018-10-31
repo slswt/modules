@@ -4,9 +4,9 @@ variable "value" {
 
 data "external" "snake_case" {
   program = [
-    "node",
-    "${path.module}/snakeCase.js",
-    "--value=${var.value}",
+    "slswtinternals",
+    "snake_case",
+    "${var.value}",
   ]
 }
 

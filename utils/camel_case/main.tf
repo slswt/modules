@@ -4,9 +4,9 @@ variable "value" {
 
 data "external" "camel_case" {
   program = [
-    "node",
-    "${path.module}/camelCase.js",
-    "--value=${var.value}",
+    "slswtinternals",
+    "camel_case",
+    "${var.value}",
   ]
 }
 

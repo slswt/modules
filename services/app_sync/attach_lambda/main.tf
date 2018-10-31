@@ -88,8 +88,8 @@ resource "aws_appsync_datasource" "appsync_lambda" {
 
 data "external" "resolver_stack" {
   program = [
-    "node",
-    "${path.module}/resolver.js",
+    "slswtinternals",
+    "make_cf_resolver_template",
     "--ApiId=${data.terraform_remote_state.appsync_api.api_id}",
     "--fields=${jsonencode(var.fields)}",
     "--DataSourceName=${local.datasource_name}",
