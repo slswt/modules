@@ -13,7 +13,7 @@ resource "aws_cloudfront_distribution" "main" {
     origin_id   = "${local.s3_origin_id}"
   }
 
-  comment = "${s3_origin_id}"
+  comment = "${local.s3_origin_id}"
 
   enabled         = true
   is_ipv6_enabled = true
@@ -56,8 +56,4 @@ resource "aws_cloudfront_distribution" "main" {
   }
 
   price_class = "PriceClass_100"
-}
-
-output "domain_name" {
-  value = "${aws_cloudfront_distribution.main.domain_name}"
 }
