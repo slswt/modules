@@ -52,7 +52,7 @@ data "null_data_source" "function_names" {
 }
 
 resource "aws_s3_bucket" "lambda_deployment_bucket" {
-  bucket = "${md5(jsonencode(data.null_data_source.function_names))}-lambdas-${data.aws_region.current.name}"
+  bucket = "${md5(jsonencode(local.fn_names))}-lambdas-${data.aws_region.current.name}"
 }
 
 resource "aws_lambda_function" "simple_lambda" {
