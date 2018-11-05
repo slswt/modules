@@ -73,14 +73,10 @@ resource "aws_lambda_function" "simple_lambda" {
 
   role = "${aws_iam_role.lambda_exec_role.arn}"
 
-  environment = {
-    variables = "${var.lambda_environment}"
-  }
-
-  description = "${var.lambda_path}/${var.handler_entries[count.index]}@${var.environment}"
+  description = "lambda_at_edge://${var.lambda_path}/${var.handler_entries[count.index]}@${var.environment}"
 
   # see the following regarding publish https://github.com/terraform-providers/terraform-provider-aws/issues/4088
-  publish = "${var.lambda_publish}"
+  publish = true
 }
 
 resource "aws_iam_role" "lambda_exec_role" {
