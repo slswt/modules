@@ -24,3 +24,7 @@ output "lambda_apigw_invoke_arn" {
 output "handler_entries" {
   value = "${var.handler_entries}"
 }
+
+output "lambda_version" {
+  value = "${aws_lambda_function.simple_lambda.*.version}"
+}
