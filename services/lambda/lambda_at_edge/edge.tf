@@ -40,7 +40,7 @@ resource "aws_cloudfront_distribution" "main" {
 
     lambda_function_association {
       event_type   = "origin-response"
-      lambda_arn   = "${aws_lambda_function.simple_lambda.qualified_arn[0]}"
+      lambda_arn   = "${aws_lambda_function.simple_lambda.*.qualified_arn[0]}"
       include_body = false
     }
   }
