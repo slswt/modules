@@ -48,3 +48,8 @@ variable "lambda_name_prefix" {
   
 }
 
+variable "lambda_publish" {
+  default = false
+}
+
+

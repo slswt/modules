@@ -79,7 +79,7 @@ resource "aws_lambda_function" "simple_lambda" {
 
   description = "${var.lambda_path}/${var.handler_entries[count.index]}@${var.environment}"
 
-  version = "1"
+  publish = "${var.lambda_publish}"
 }
 
 resource "aws_iam_role" "lambda_exec_role" {
