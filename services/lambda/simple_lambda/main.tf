@@ -30,7 +30,7 @@ locals {
 }
 
 resource "aws_s3_bucket_object" "lambda_zip_upload" {
-  bucket       = "${var.lambda_deployment_bucket}"
+  bucket       = "${aws_s3_bucket.lambda_deployment_bucket.id}"
   key          = "${local.s3_key}"
   source       = "${data.external.webpack_build.result.zipFile}"
   content_type = "application/zip"
@@ -43,13 +43,16 @@ module "function_name" {
   lambda_name_prefix = "${var.lambda_name_prefix}"
 }
 
-
 data "null_data_source" "function_names" {
   count = "${length(var.handler_entries)}"
 
   inputs = {
     function_name = "${md5(format(module.function_name.base_entry_format, module.function_name.base, var.handler_entries[count.index]))}"
   }
+}
+
+resource "aws_s3_bucket" "lambda_deployment_bucket" {
+  bucket = "${md5(jsonencode(data.null_data_source.function_names))}-lambdas-${data.aws_region.current.name}"
 }
 
 resource "aws_lambda_function" "simple_lambda" {
@@ -59,7 +62,7 @@ resource "aws_lambda_function" "simple_lambda" {
 
   function_name = "${local.fn_names[count.index]}"
 
-  s3_bucket = "${var.lambda_deployment_bucket}"
+  s3_bucket = "${aws_s3_bucket.lambda_deployment_bucket.id}"
   s3_key    = "${local.s3_key}"
 
   handler = "service.${var.handler_entries[count.index]}"
