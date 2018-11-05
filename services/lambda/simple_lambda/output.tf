@@ -9,6 +9,9 @@ output "has_errors" {
 output "lambda_arn" {
   value = "${aws_lambda_function.simple_lambda.*.arn}"
 }
+output "lambda_qualified_arn" {
+  value = "${aws_lambda_function.simple_lambda.*.qualified_arn}"
+}
 
 output "role_name" {
   value = "${aws_iam_role.lambda_exec_role.name}"
