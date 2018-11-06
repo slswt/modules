@@ -39,11 +39,12 @@ variable "node_externals_whitelist" {
   type        = "list"
 }
 
-variable "lambda_name_prefix" {
-  
-}
+variable "lambda_name_prefix" {}
 
+variable "origin_id" {}
 
-variable "origin_id" {
-  
+variable "forwarded_headers" {
+  type        = "list"
+  default     = []
+  description = "The forwarded values"
 }
