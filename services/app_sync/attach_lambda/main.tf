@@ -64,18 +64,8 @@ resource "aws_iam_role_policy" "policy" {
 EOF
 }
 
-data "terraform_remote_state" "appsync_api" {
-  backend = "s3"
-
-  config {
-    bucket = "${var.remote_state_bucket}"
-    key    = "${var.appsync_api_remote_state_path}/${var.environment}/terraform.tfstate"
-    region = "eu-central-1"
-  }
-}
-
 resource "aws_appsync_datasource" "appsync_lambda" {
-  api_id = "${data.terraform_remote_state.appsync_api.api_id}"
+  api_id = "${var.api_id}"
   name   = "${local.datasource_name}"
   type   = "AWS_LAMBDA"
 
@@ -90,7 +80,7 @@ data "external" "resolver_stack" {
   program = [
     "slswtinternals",
     "make_cf_resolver_template",
-    "--ApiId=${data.terraform_remote_state.appsync_api.api_id}",
+    "--ApiId=${var.api_id}",
     "--fields=${jsonencode(var.fields)}",
     "--DataSourceName=${local.datasource_name}",
   ]
