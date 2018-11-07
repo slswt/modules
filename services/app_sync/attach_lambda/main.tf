@@ -81,7 +81,7 @@ data "external" "resolver_stack" {
     "slswtinternals",
     "make_cf_resolver_template",
     "--ApiId=${var.api_id}",
-    "--fields=${base64encode(jsonencode(var.fields))}",
+    "--fields=${jsonencode(var.fields)}",
     "--DataSourceName=${local.datasource_name}",
   ]
 }
