@@ -11,7 +11,7 @@ variable "entry" {
 }
 
 locals {
-  function_base_name = "${var.lambda_name_prefix}_${module.snake_case.value}"
+  function_base_name = "${var.lambda_name_prefix}-${module.snake_case.value}"
   base_entry_format = "%s_%s"
 }
 module "snake_case" {

@@ -9,7 +9,7 @@ data "external" "webpack_build" {
     # The location of the service path (where the tf file of the module service is (and javascript files))
     "--path=${var.module_path}",
 
-    # The path of where the root module is installed
+    # The path of where the this module is installed (usually in a .Terraform/modules dir)
     "--modulePath=${path.module}",
 
     # The path of the tf files for the microservice (the build directory is here)
