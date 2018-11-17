@@ -10,7 +10,8 @@ data "external" "names" {
     "slswtinternals",
     "get_name",
     "${path.root}",
-    "--region=${data.aws_region.current.name}"
+    "--region=${data.aws_region.current.name}",
+    "--key=${var.key}"
   ]
 }
 
