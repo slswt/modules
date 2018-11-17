@@ -1,7 +1,3 @@
-variable "environment" {
-  description = "The deployment environment"
-}
-
 variable "source_lambda_role" {
   description = "The name of the role on which to attach the policy"
 }
