@@ -7,17 +7,15 @@ data "external" "webpack_build" {
     "build_lambda",
     "--liveFolder=${path.root}",
     "--service=${var.service}",
-    "--region=${data.aws_region.current.name}",
   ]
 }
 
-
 locals {
   log_group_access_prefix = "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/"
-  entries = "${split("|", data.external.webpack_build.result.entries)}"
-  functionNames = "${split("|", data.external.webpack_build.result.functionNames)}"
-  functionDescriptions = "${split("|", data.external.webpack_build.result.functionDescriptions)}"
-  lambdaHandlers = "${split("|", data.external.webpack_build.result.lambdaHandlers)}"
+  entries                 = "${split("|", data.external.webpack_build.result.entries)}"
+  functionNames           = "${split("|", data.external.webpack_build.result.functionNames)}"
+  functionDescriptions    = "${split("|", data.external.webpack_build.result.functionDescriptions)}"
+  lambdaHandlers          = "${split("|", data.external.webpack_build.result.lambdaHandlers)}"
 }
 
 resource "aws_s3_bucket_object" "lambda_zip_upload" {
@@ -27,6 +25,17 @@ resource "aws_s3_bucket_object" "lambda_zip_upload" {
   content_type = "application/zip"
 }
 
+locals {
+  environment = {
+    region      = "${data.external.webpack_build.result.region}"
+    projectId   = "${data.external.webpack_build.result.projectId}"
+    platform    = "${data.external.webpack_build.result.platform}"
+    accountId   = "${data.external.webpack_build.result.accountId}"
+    environment = "${data.external.webpack_build.result.environment}"
+    version     = "${data.external.webpack_build.result.version}"
+    path        = "${data.external.webpack_build.result.path}"
+  }
+}
 
 resource "aws_lambda_function" "simple_lambda" {
   depends_on = ["aws_s3_bucket_object.lambda_zip_upload"]
@@ -47,7 +56,10 @@ resource "aws_lambda_function" "simple_lambda" {
   role = "${aws_iam_role.lambda_exec_role.arn}"
 
   environment = {
-    variables = "${var.lambda_environment}"
+    variables = "${merge(
+      var.lambda_environment,
+      local.environment
+    )}"
   }
 
   description = "${local.functionDescriptions[count.index]}"
