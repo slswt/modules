@@ -2,20 +2,21 @@ variable "lambda_arn" {
   description = "The arn of the lambda which will subscribe to the topic"
 }
 
-variable "environment" {
-  description = "The deployment environment"
-}
+
 variable "lambda_path" {}
 
 
 module "function_name" {
   source = "github.com/slswt/modules//utils/function_name"
-  environment = "${var.environment}"
   lambda_path = "${var.lambda_path}"
 }
 
+module "release_info" {
+  source = "github.com/slswt/modules//utils/release_info"
+}
+
 resource "aws_sns_topic" "topic" {
-  name = "invoke_function_${module.function_name.snake}_${var.environment}"
+  name = "invoke_function_${module.function_name.snake}_${module.release_info.environment}_${module.release_info.version}"
 }
 
 resource "aws_sns_topic_subscription" "sns_invokable_lambda" {

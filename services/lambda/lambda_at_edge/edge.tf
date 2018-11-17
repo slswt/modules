@@ -1,5 +1,9 @@
+module "release_info" {
+  source = "github.com/slswt/modules//utils/release_info"
+}
+
 locals {
-  s3_origin_id = "${var.origin_id}-${var.environment}"
+  s3_origin_id = "${var.origin_id}-${module.release_info.environment}-${module.release_info.version}"
 }
 
 resource "aws_s3_bucket" "origin" {

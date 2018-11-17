@@ -2,7 +2,6 @@ data "external" "webpack_build" {
   program = [
     "slswtinternals",
     "build_lambda",
-    "--environment=${var.environment}",
     "--functionName=${var.lambda_path}",
     "--webpackMode=${var.webpack_mode}",
 
@@ -38,7 +37,6 @@ resource "aws_s3_bucket_object" "lambda_zip_upload" {
 
 module "function_name" {
   source             = "github.com/slswt/modules//utils/function_name"
-  environment        = "${var.environment}"
   lambda_path        = "${var.lambda_path}"
   lambda_name_prefix = "${var.lambda_name_prefix}"
 }
@@ -51,10 +49,13 @@ data "null_data_source" "function_names" {
   }
 }
 
-resource "aws_s3_bucket" "lambda_deployment_bucket" {
-  bucket = "${md5(jsonencode(local.fn_names))}-lambdas-${data.aws_region.current.name}"
+module "release_info" {
+  source = "github.com/slswt/modules//utils/release_info"
 }
 
+resource "aws_s3_bucket" "lambda_deployment_bucket" {
+  bucket = "${md5(format("%s %s %s", jsonencode(local.fn_names), data.aws_region.current.name))}"
+}
 resource "aws_lambda_function" "simple_lambda" {
   depends_on = ["aws_s3_bucket_object.lambda_zip_upload"]
 
@@ -73,7 +74,7 @@ resource "aws_lambda_function" "simple_lambda" {
 
   role = "${aws_iam_role.lambda_exec_role.arn}"
 
-  description = "lambda_at_edge://${var.lambda_path}/${var.handler_entries[count.index]}@${var.environment}"
+  description = "lambda_at_edge://${var.lambda_path}/${var.handler_entries[count.index]}@${module.release_info.environment}-${module.release_info.version}"
 
   # see the following regarding publish https://github.com/terraform-providers/terraform-provider-aws/issues/4088
   publish = true

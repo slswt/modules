@@ -6,22 +6,13 @@ variable "lambda_arn" {
   description = "The arn of the lambda"
 }
 
-variable "environment" {
-  description = "The deployment environment"
-}
-
 variable "lambda_path" {
   description = "The relative path of the lambda"
 }
 
-data "terraform_remote_state" "microservices_apigw" {
-  backend = "s3"
-
-  config {
-    bucket = "${var.remote_state_bucket}"
-    key    = "${var.apigw_remote_state_path}/${var.environment}/terraform.tfstate"
-    region = "eu-central-1"
-  }
+module "remote_state" {
+  source = "github.com/slswt/modules//utils/remote_state"
+  path   = "${var.apigw_remote_state_path}"
 }
 
 module "camel_case" {
@@ -30,8 +21,8 @@ module "camel_case" {
 }
 
 resource "aws_api_gateway_resource" "proxy" {
-  rest_api_id = "${data.terraform_remote_state.microservices_apigw.rest_api_id}"
-  parent_id   = "${data.terraform_remote_state.microservices_apigw.root_resource_id}"
+  rest_api_id = "${module.remote_state.result.microservices_apigw.rest_api_id}"
+  parent_id   = "${module.remote_state.result.microservices_apigw.root_resource_id}"
   path_part   = "${module.camel_case.value}"
 }
 
@@ -52,13 +43,22 @@ resource "aws_api_gateway_integration" "lambda" {
   uri                     = "${var.lambda_apigw_invoke_arn}"
 }
 
+module "release_info" {
+  source = "github.com/slswt/modules//utils/release_info"
+}
+
+module "snake_case" {
+  source = "github.com/slswt/modules//utils/release_info"
+  value  = "${module.release_info.version}"
+}
+
 resource "aws_api_gateway_deployment" "apigw_deployment" {
   depends_on = [
     "aws_api_gateway_integration.lambda",
   ]
 
   rest_api_id = "${data.terraform_remote_state.microservices_apigw.rest_api_id}"
-  stage_name  = "${var.environment}"
+  stage_name  = "${module.snake_case.value}"
 }
 
 resource "aws_lambda_permission" "apigw" {

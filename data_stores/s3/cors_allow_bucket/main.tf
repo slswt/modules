@@ -9,12 +9,10 @@ variable "acl" {
   description = "The acl value of the bucket"
 }
 
-variable "s3_bucket_name_prefix" {
-}
 
 
 locals {
-  full_bucket_name = "${var.s3_bucket_name_prefix}-${var.bucket_name}"
+  full_bucket_name = "${var.bucket_name}"
 }
 
 
