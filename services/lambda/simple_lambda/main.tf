@@ -10,14 +10,6 @@ data "external" "webpack_build" {
   ]
 }
 
-locals {
-  log_group_access_prefix = "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/"
-  entries                 = "${split("|", data.external.webpack_build.result.entries)}"
-  functionNames           = "${split("|", data.external.webpack_build.result.functionNames)}"
-  functionDescriptions    = "${split("|", data.external.webpack_build.result.functionDescriptions)}"
-  lambdaHandlers          = "${split("|", data.external.webpack_build.result.lambdaHandlers)}"
-}
-
 resource "aws_s3_bucket_object" "lambda_zip_upload" {
   bucket       = "${data.external.webpack_build.result.bucket}"
   key          = "${data.external.webpack_build.result.bucketObjectKey}"
@@ -25,7 +17,14 @@ resource "aws_s3_bucket_object" "lambda_zip_upload" {
   content_type = "application/zip"
 }
 
+
 locals {
+  log_group_access_prefix = "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/"
+  entries                 = "${split("|", data.external.webpack_build.result.entries)}"
+  functionNames           = "${split("|", data.external.webpack_build.result.functionNames)}"
+  functionDescriptions    = "${split("|", data.external.webpack_build.result.functionDescriptions)}"
+  lambdaHandlers          = "${split("|", data.external.webpack_build.result.lambdaHandlers)}"
+
   environment = {
     region      = "${data.external.webpack_build.result.region}"
     projectId   = "${data.external.webpack_build.result.projectId}"

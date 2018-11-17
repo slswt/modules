@@ -1,10 +1,3 @@
-variable "environment" {
-  description = "The deployment environment, stage, prod or testing"
-}
-
-variable "table_name" {
-  description = "The name of the table"
-}
 variable "read_capacity" {
   description = "The read capacity of the table"
   default = 1
@@ -22,14 +15,11 @@ variable "stream_view_type" {
   default = ""
 }
 
-variable "ddb_table_name_prefix" {
-  
-}
 
 
 
 locals {
-  full_table_name = "${var.ddb_table_name_prefix}-${var.table_name}"
+  full_table_name = "${md5(replace(path.root, "/^.*\\.Live\\/(.*)$/", ".Live/$1"))}"
 }
 
 
