@@ -17,7 +17,7 @@ locals {
   # datasource_name = "${md5(format("%s%s", var.lambda_arn, jsonencode(var.fields)))}"
   description     = "${format("%s/%s", replace(path.root, "/^.*\\.Live\\/(.*)$/", ".Live/$1"), md5(jsonencode(var.fields)))}"
   # Cannot start with number
-  datasource_name = "ds${substr(md5(local.description), 0, 30)}"
+  datasource_name = "ds${substr(md5(format("%s/%s", replace(path.root, "/^.*\\.Live\\/(.*)$/", ".Live/$1"), md5(jsonencode(var.fields)))), 0, 30)}"
 }
 
 resource "aws_iam_role" "role" {
