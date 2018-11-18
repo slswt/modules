@@ -16,7 +16,7 @@ EOF
 locals {
   # datasource_name = "${md5(format("%s%s", var.lambda_arn, jsonencode(var.fields)))}"
   description     = "${format("%s/%s", replace(path.root, "/^.*\\.Live\\/(.*)$/", ".Live/$1"), md5(jsonencode(var.fields)))}"
-  datasource_name = "${local.description}"
+  datasource_name = "${md5(local.description)}"
 }
 
 resource "aws_iam_role" "role" {
