@@ -65,7 +65,7 @@ EOF
 resource "aws_appsync_datasource" "appsync_lambda" {
   api_id      = "${var.api_id}"
   name        = "${local.datasource_name}"
-  description = "${local.description}"
+  # description = "${local.description}"
   type        = "AWS_LAMBDA"
 
   lambda_config {
