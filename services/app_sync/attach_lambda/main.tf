@@ -17,7 +17,7 @@ locals {
   # datasource_name = "${md5(format("%s%s", var.lambda_arn, jsonencode(var.fields)))}"
   description     = "${format("%s/%s", replace(path.root, "/^.*\\.Live\\/(.*)$/", ".Live/$1"), md5(jsonencode(var.fields)))}"
   # Cannot start with number
-  datasource_name = "ds${substr(md5(format("%s/%s", replace(path.root, "/^.*\\.Live\\/(.*)$/", ".Live/$1"), md5(jsonencode(var.fields)))), 0, 30)}"
+  datasource_name = "ds${substr(md5(local.description), 0, 30)}"
 }
 
 resource "aws_iam_role" "role" {
@@ -65,7 +65,7 @@ EOF
 resource "aws_appsync_datasource" "appsync_lambda" {
   api_id      = "${var.api_id}"
   name        = "${local.datasource_name}"
-  # description = "${local.description}"
+  description = "${local.description}"
   type        = "AWS_LAMBDA"
 
   lambda_config {
@@ -75,7 +75,15 @@ resource "aws_appsync_datasource" "appsync_lambda" {
   service_role_arn = "${aws_iam_role.role.arn}"
 }
 
-
+data "external" "resolver_stack" {
+  program = [
+    "slswtinternals",
+    "make_cf_resolver_template",
+    "--ApiId=${var.api_id}",
+    "--fields=${jsonencode(var.fields)}",
+    "--DataSourceName=${local.datasource_name}",
+  ]
+}
 
 resource "aws_cloudformation_stack" "resolver" {
   depends_on    = ["aws_appsync_datasource.appsync_lambda"]
