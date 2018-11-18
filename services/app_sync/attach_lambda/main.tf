@@ -1,6 +1,3 @@
-variable "environment" {
-  description = "The deployment environment"
-}
 
 variable "lambda_arn" {
   description = "The arn of the lambda"
