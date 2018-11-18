@@ -75,6 +75,8 @@ resource "aws_appsync_datasource" "appsync_lambda" {
 }
 
 data "external" "resolver_stack" {
+  depends_on = ["aws_appsync_datasource.appsync_lambda"]
+
   program = [
     "slswtinternals",
     "make_cf_resolver_template",
