@@ -1,4 +1,3 @@
-
 variable "lambda_arn" {
   description = "The arn of the lambda"
 }
@@ -16,7 +15,8 @@ EOF
 
 locals {
   # datasource_name = "${md5(format("%s%s", var.lambda_arn, jsonencode(var.fields)))}"
-  datasource_name = "ds${substr(md5(jsonencode(var.fields)), 0, 30)}"
+  description     = "${format("%s/%s", replace(path.root, "/^.*\\.Live\\/(.*)$/", ".Live/$1"), md5(jsonencode(var.fields)))}"
+  datasource_name = "${substr(md5(local.description), 0, 30)}"
 }
 
 resource "aws_iam_role" "role" {
@@ -62,9 +62,10 @@ EOF
 }
 
 resource "aws_appsync_datasource" "appsync_lambda" {
-  api_id = "${var.api_id}"
-  name   = "${local.datasource_name}"
-  type   = "AWS_LAMBDA"
+  api_id      = "${var.api_id}"
+  name        = "${local.datasource_name}"
+  description = "${local.description}"
+  type        = "AWS_LAMBDA"
 
   lambda_config {
     function_arn = "${var.lambda_arn}"
@@ -73,19 +74,11 @@ resource "aws_appsync_datasource" "appsync_lambda" {
   service_role_arn = "${aws_iam_role.role.arn}"
 }
 
-data "external" "resolver_stack" {
-  program = [
-    "slswtinternals",
-    "make_cf_resolver_template",
-    "--ApiId=${var.api_id}",
-    "--fields=${jsonencode(var.fields)}",
-    "--DataSourceName=${local.datasource_name}",
-  ]
-}
+
 
 resource "aws_cloudformation_stack" "resolver" {
-  depends_on       = ["aws_appsync_datasource.appsync_lambda"]
-  name             = "${data.external.resolver_stack.result.stack_name}"
-  template_body    = "${data.external.resolver_stack.result.cloud_formation_stack}"
-  on_failure       = "DELETE"
+  depends_on    = ["aws_appsync_datasource.appsync_lambda"]
+  name          = "${data.external.resolver_stack.result.stack_name}"
+  template_body = "${data.external.resolver_stack.result.cloud_formation_stack}"
+  on_failure    = "DELETE"
 }
