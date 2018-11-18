@@ -85,9 +85,9 @@ data "external" "resolver_stack" {
   ]
 }
 
-# resource "aws_cloudformation_stack" "resolver" {
-#   depends_on    = ["aws_appsync_datasource.appsync_lambda"]
-#   name          = "${data.external.resolver_stack.result.stack_name}"
-#   template_body = "${data.external.resolver_stack.result.cloud_formation_stack}"
-#   on_failure    = "DELETE"
-# }
+resource "aws_cloudformation_stack" "resolver" {
+  depends_on    = ["aws_appsync_datasource.appsync_lambda"]
+  name          = "${data.external.resolver_stack.result.stack_name}"
+  template_body = "${data.external.resolver_stack.result.cloud_formation_stack}"
+  on_failure    = "DELETE"
+}
