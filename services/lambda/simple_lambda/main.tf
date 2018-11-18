@@ -17,7 +17,6 @@ resource "aws_s3_bucket_object" "lambda_zip_upload" {
   content_type = "application/zip"
 }
 
-
 locals {
   log_group_access_prefix = "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/"
   entries                 = "${split("|", data.external.webpack_build.result.entries)}"
@@ -27,9 +26,9 @@ locals {
 
   environment = {
     region      = "${data.external.webpack_build.result.region}"
-    projectId   = "${data.external.webpack_build.result.projectId}"
+    project     = "${data.external.webpack_build.result.project}"
     platform    = "${data.external.webpack_build.result.platform}"
-    accountId   = "${data.external.webpack_build.result.accountId}"
+    account     = "${data.external.webpack_build.result.account}"
     environment = "${data.external.webpack_build.result.environment}"
     version     = "${data.external.webpack_build.result.version}"
     path        = "${data.external.webpack_build.result.path}"
