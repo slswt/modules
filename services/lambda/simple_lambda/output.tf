@@ -12,3 +12,7 @@ output "entries" {
 output "lambda_version" {
   value = "${zipmap(local.entries, aws_lambda_function.simple_lambda.*.version)}"
 }
+
+output "lambda_apigw_invoke_arn" {
+  value = "${zipmap(local.entries, aws_lambda_function.simple_lambda.*.invoke_arn)}"
+}
