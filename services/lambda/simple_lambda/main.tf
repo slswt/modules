@@ -25,13 +25,13 @@ locals {
   lambdaHandlers          = "${split("|", data.external.webpack_build.result.lambdaHandlers)}"
 
   environment = {
-    region      = "${data.external.webpack_build.result.region}"
-    project     = "${data.external.webpack_build.result.project}"
-    platform    = "${data.external.webpack_build.result.platform}"
-    account     = "${data.external.webpack_build.result.account}"
-    environment = "${data.external.webpack_build.result.environment}"
-    version     = "${data.external.webpack_build.result.version}"
-    path        = "${data.external.webpack_build.result.path}"
+    region      = "${data.external.webpack_build.result.env_region}"
+    project     = "${data.external.webpack_build.result.env_project}"
+    platform    = "${data.external.webpack_build.result.env_platform}"
+    account     = "${data.external.webpack_build.result.env_account}"
+    environment = "${data.external.webpack_build.result.env_environment}"
+    version     = "${data.external.webpack_build.result.env_version}"
+    path        = "${data.external.webpack_build.result.env_path}"
   }
 }
 
