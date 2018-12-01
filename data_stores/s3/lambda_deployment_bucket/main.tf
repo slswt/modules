@@ -13,20 +13,13 @@ module "lambda_deployment_bucket" {
   }
 }
 
-resource "aws_s3_bucket" "cors_allow_bucket" {
+resource "aws_s3_bucket" "deployments" {
   bucket = "${module.lambda_deployment_bucket.name}"
-  acl    = "${var.acl}"
-
-  cors_rule {
-    allowed_headers = ["*"]
-    allowed_methods = ["GET"]
-    allowed_origins = ["*"]
-    max_age_seconds = 3000
-  }
+  acl    = "private"
 }
 
 output "arn" {
-  value = "${aws_s3_bucket.cors_allow_bucket.arn}"
+  value = "${aws_s3_bucket.deployments.arn}"
 }
 
 output "name" {
