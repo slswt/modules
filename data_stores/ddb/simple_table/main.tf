@@ -21,7 +21,7 @@ variable "stream_view_type" {
 }
 
 locals {
-  full_table_name = "${md5(format("%s/dynamo_db/%s", replace(path.root, "/^.*\\.Live\\/(.*)$/", ".Live/$1"), var.id))}"
+  full_table_name = "${md5(format("%s/aws_dynamodb_table/%s", replace(path.root, "/^.*\\.Live\\/(.*)$/", ".Live/$1"), var.id))}"
 }
 
 resource "aws_dynamodb_table" "simple_table" {

@@ -1,5 +1,10 @@
+
 variable "service" {
   description = "The path to the service (.js file)"
+}
+
+variable "id" {
+  default = "${var.service}"
 }
 
 variable "timeout" {

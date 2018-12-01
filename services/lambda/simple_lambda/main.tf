@@ -7,6 +7,9 @@ data "external" "webpack_build" {
     "build_lambda",
     "--liveFolder=${path.root}",
     "--service=${var.service}",
+    "--id=${var.id}",
+    # is needed to derive the bucket name
+    "--region=${data.aws_region.current.name}"
   ]
 }
 
@@ -25,13 +28,13 @@ locals {
   lambdaHandlers          = "${split("|", data.external.webpack_build.result.lambdaHandlers)}"
 
   environment = {
-    region      = "${data.external.webpack_build.result.env_region}"
     project     = "${data.external.webpack_build.result.env_project}"
-    platform    = "${data.external.webpack_build.result.env_platform}"
-    account     = "${data.external.webpack_build.result.env_account}"
     environment = "${data.external.webpack_build.result.env_environment}"
     version     = "${data.external.webpack_build.result.env_version}"
     path        = "${data.external.webpack_build.result.env_path}"
+    platform    = "aws"
+    account     = "${data.aws_caller_identity.current.account_id}"
+    region      = "${data.aws_region.current.name}"
   }
 }
 
