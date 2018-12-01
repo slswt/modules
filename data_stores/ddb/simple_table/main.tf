@@ -9,7 +9,6 @@ variable "write_capacity" {
 }
 
 variable "id" {
-  default = "default_id"
 }
 
 variable "stream_enabled" {
