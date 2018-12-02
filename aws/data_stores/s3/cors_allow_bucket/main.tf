@@ -7,7 +7,8 @@ variable "acl" {
 }
 
 locals {
-  full_bucket_name = "${md5(format("%s/aws_s3_bucket/%s", replace(path.root, "/^.*\\.Live\\/(.*)$/", "$1"), var.id))}"
+  deployment_uri = "${format("%s/aws_s3_bucket/%s", replace(path.root, "/^.*\\.Live\\/(.*)$/", "$1"), var.id)}"
+  full_bucket_name = "${md5(local.deployment_uri)}"
 }
 
 
@@ -28,4 +29,8 @@ output "arn" {
 
 output "name" {
   value = "${local.full_bucket_name}"
+}
+
+output "deployment_uri" {
+  value = "${local.deployment_uri}"
 }
