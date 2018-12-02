@@ -9,7 +9,7 @@ data "aws_caller_identity" "current" {}
 
 locals {
   deployment_uri = "${format(
-    "%s/aws/%s/aws_api_gateway_rest_api/%s/%s",
+    "%s/aws/%s/%s/aws_api_gateway_rest_api/%s",
     replace(path.root, "/^.*\\.Live\\/(.*)$/", "$1"),
     data.aws_caller_identity.current.account_id,
     data.aws_region.current.name,
