@@ -20,6 +20,7 @@ locals {
 
 resource "aws_api_gateway_rest_api" "screed_microservices" {
   name = "${local.name}"
+  description = "${local.deployment_uri}"
 }
 
 
