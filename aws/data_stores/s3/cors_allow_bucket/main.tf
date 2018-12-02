@@ -1,18 +1,13 @@
 
-variable "environment" {
-  description = "Deployment env"
-}
-variable "bucket_name" {
-  description = "The name of the bucket"
+variable "id" {
+  description = "The id of the bucket resource"
 }
 variable "acl" {
   description = "The acl value of the bucket"
 }
 
-
-
 locals {
-  full_bucket_name = "${var.bucket_name}"
+  full_bucket_name = "${md5(format("%s/aws_s3_bucket/%s", replace(path.root, "/^.*\\.Live\\/(.*)$/", "$1"), var.id))}"
 }
 
 
