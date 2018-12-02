@@ -17,3 +17,6 @@ output "api_id" {
 output "api_arn" {
   value = "${aws_appsync_graphql_api.graphql_api.arn}"
 }
+output "deployment_uri" {
+  value = "${local.deployment_uri}"
+}
