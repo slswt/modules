@@ -1,3 +1,4 @@
+data "aws_region" "current" {}
 variable "path" {
   
 }
@@ -19,7 +20,7 @@ data "terraform_remote_state" "state" {
 
   config {
     bucket = "${data.external.slswt_remote_config.result.tfRemoteStateBucket}"
-    key    = "Live/${module.release_info.environment}/${module.release_info.version}/${var.path}/terraform.tfstate"
+    key    = "${data.external.deployment_data.result.globalDeploymentURI}/${data.aws_region.current.name}.terraform.tfstate"
     region = "${data.external.slswt_remote_config.result.region}"
   }
 }

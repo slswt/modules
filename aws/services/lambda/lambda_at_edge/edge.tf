@@ -13,8 +13,9 @@ resource "aws_s3_bucket" "origin" {
 
 resource "aws_cloudfront_distribution" "main" {
   origin {
-    domain_name = "${aws_s3_bucket.origin.bucket_regional_domain_name}"
-    origin_id   = "${local.s3_origin_id}"
+    domain_name         = "${aws_s3_bucket.origin.bucket_regional_domain_name}"
+    origin_id           = "${local.s3_origin_id}"
+    origin_read_timeout = 60
   }
 
   comment = "${local.s3_origin_id}"
